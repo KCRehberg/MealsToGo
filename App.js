@@ -9,9 +9,7 @@ import {
 import { useFonts as useLato, Lato_400Regular } from '@expo-google-fonts/lato';
 import { theme } from './src/infrastructure/theme';
 import { Navigation } from './src/infrastructure/navigation';
-import { RestaurantsContextProvider } from './src/services/restaurants/restaurants.context';
-import { LocationContextProvider } from './src/services/location/location.context';
-import { FavouritesContextProvider } from './src/services/favourites/favourites.context';
+import { AuthenticationContextProvider } from './src/services/authentication/authentication.context';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC1Nva7W5tFNyt1GahLZLuy9iu3lcTv9Ro',
@@ -22,7 +20,9 @@ const firebaseConfig = {
   appId: '1:42394572602:web:c27da5d3bce91d2a0be203',
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 export default function App() {
   const [oswaldLoaded] = useOswald({
@@ -40,13 +40,9 @@ export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <FavouritesContextProvider>
-          <LocationContextProvider>
-            <RestaurantsContextProvider>
-              <Navigation />
-            </RestaurantsContextProvider>
-          </LocationContextProvider>
-        </FavouritesContextProvider>
+        <AuthenticationContextProvider>
+          <Navigation />
+        </AuthenticationContextProvider>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>
